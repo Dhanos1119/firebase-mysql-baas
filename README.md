@@ -15,6 +15,7 @@
 - .env.example
 - package.json
 - .gitignore
+now all are okay
 
 ---
 
