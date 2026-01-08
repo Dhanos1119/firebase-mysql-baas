@@ -1,4 +1,4 @@
-import admin from "firebase-admin";
+import admin from "../config/firebase.js";
 import jwt from "jsonwebtoken";
 import db from "../config/db.js";
 
@@ -49,13 +49,13 @@ export const registerUser = async (req, res) => {
 // ---------------- LOGIN ----------------
 export const loginUser = async (req, res) => {
   try {
-    const { firebaseToken } = req.body;
+    const { idToken } = req.body;
 
-    if (!firebaseToken) {
-      return res.status(400).json({ message: "Firebase token required" });
+    if (!idToken) {
+      return res.status(400).json({ message: "Firebase idToken required" });
     }
 
-    const decodedToken = await admin.auth().verifyIdToken(firebaseToken);
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
     const { uid, email } = decodedToken;
 
     const [rows] = await db.query(
@@ -77,11 +77,16 @@ export const loginUser = async (req, res) => {
       message: "Login successful",
       token,
     });
+
   } catch (error) {
-    console.error("Login error:", error);
-    res.status(401).json({ message: "Authentication failed" });
+    console.error("🔥 VERIFY TOKEN ERROR FULL:", error);
+    res.status(401).json({
+      message: "Authentication failed",
+      error: error.message,
+    });
   }
 };
+
 
 // ---------------- CURRENT USER ----------------
 export const getCurrentUser = async (req, res) => {

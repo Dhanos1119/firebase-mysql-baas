@@ -8,11 +8,11 @@ import { verifyToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Public routes
+// Public
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 
-// Protected route
+// Protected
 router.get("/me", verifyToken, getCurrentUser);
 
 export default router;
