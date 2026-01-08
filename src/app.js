@@ -7,6 +7,8 @@ import authRoutes from "./routes/auth.routes.js";
 import dataRoutes from "./routes/data.routes.js";
 import storageRoutes from "./routes/storage.routes.js";
 import devRoutes from "./routes/dev.routes.js";
+import "./config/firebase.js";
+
 
 const app = express();
 
