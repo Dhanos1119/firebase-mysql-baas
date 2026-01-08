@@ -1,9 +1,18 @@
-import { Router } from "express";
+import express from "express";
+import {
+  registerUser,
+  loginUser,
+  getCurrentUser,
+} from "../controllers/auth.controller.js";
+import { verifyToken } from "../middleware/auth.middleware.js";
 
-const router = Router();
+const router = express.Router();
 
-router.get("/test", (req, res) => {
-  res.json({ message: "Auth route working" });
-});
+// Public routes
+router.post("/register", registerUser);
+router.post("/login", loginUser);
+
+// Protected route
+router.get("/me", verifyToken, getCurrentUser);
 
 export default router;
