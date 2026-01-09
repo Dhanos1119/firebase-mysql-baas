@@ -1,9 +1,12 @@
-import { Router } from "express";
+import express from "express";
+import {
+  showTablesHTML,
+  showUsersHTML,
+} from "../controllers/data.controller.js";
 
-const router = Router();
+const router = express.Router();
 
-router.get("/test", (req, res) => {
-  res.json({ message: "Data route working" });
-});
+router.get("/tables", showTablesHTML);
+router.get("/users", showUsersHTML);
 
 export default router;

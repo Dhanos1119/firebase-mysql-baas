@@ -1,10 +1,12 @@
+/*
+// ================= OLD FULL SERVER (COMMENTED) =================
+
 // server.js
 import express from "express";
 import dotenv from "dotenv";
 import mysql from "mysql2/promise";
 import admin from "firebase-admin";
 import serviceAccount from "./config/firebase-key.json" assert { type: "json" };
-
 
 dotenv.config();
 
@@ -14,6 +16,7 @@ app.use(express.json());
 /* =========================
    🔥 FIREBASE INITIALIZE
 ========================= */
+/*
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
@@ -21,6 +24,7 @@ admin.initializeApp({
 /* =========================
    🔥 MYSQL CONNECTION
 ========================= */
+/*
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -33,9 +37,8 @@ const db = mysql.createPool({
 // DB test on startup
 (async () => {
   try {
-const [rows] = await db.query("SELECT 1 + 1 AS result");
-console.log("✅ MySQL query test result:", rows[0].result);
-
+    const [rows] = await db.query("SELECT 1 + 1 AS result");
+    console.log("✅ MySQL query test result:", rows[0].result);
   } catch (err) {
     console.error("❌ MySQL connection failed:", err.message);
   }
@@ -44,6 +47,7 @@ console.log("✅ MySQL query test result:", rows[0].result);
 /* =========================
    🔐 AUTH MIDDLEWARE
 ========================= */
+/*
 async function authMiddleware(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
@@ -53,10 +57,9 @@ async function authMiddleware(req, res, next) {
     }
 
     const token = authHeader.split(" ")[1];
-
     const decoded = await admin.auth().verifyIdToken(token);
 
-    req.user = decoded; // uid, email, name
+    req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ error: "Invalid Firebase token" });
@@ -66,17 +69,16 @@ async function authMiddleware(req, res, next) {
 /* =========================
    🚀 TEST API (MAIN)
 ========================= */
+/*
 app.get("/auth-test", authMiddleware, async (req, res) => {
   try {
     const { uid, email, name } = req.user;
 
-    // 1️⃣ Check if user exists
     const [rows] = await db.execute(
       "SELECT * FROM users WHERE firebase_uid = ?",
       [uid]
     );
 
-    // 2️⃣ Insert if new user
     if (rows.length === 0) {
       await db.execute(
         "INSERT INTO users (firebase_uid, email, name) VALUES (?, ?, ?)",
@@ -84,7 +86,6 @@ app.get("/auth-test", authMiddleware, async (req, res) => {
       );
     }
 
-    // 3️⃣ Success response
     res.json({
       status: "AUTH_OK",
       uid,
@@ -98,8 +99,20 @@ app.get("/auth-test", authMiddleware, async (req, res) => {
 /* =========================
    ▶️ SERVER START
 ========================= */
+/*
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
+*/
+
+import app from "./app.js";
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`👉 View tables: http://localhost:${PORT}/api/data/tables`);
+  console.log(`👉 View users: http://localhost:${PORT}/api/data/users`);
 });
