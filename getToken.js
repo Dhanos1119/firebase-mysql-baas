@@ -13,17 +13,14 @@ const auth = getAuth(app);
 async function login() {
   const userCred = await signInWithEmailAndPassword(
     auth,
-    "test@gmail.com",
-    "123456"
+    "test@gmail.com",   // ✅ Firebase-la irukkura user
+    "123456"            // ✅ Andha user-oda password
   );
 
   const idToken = await userCred.user.getIdToken();
-  console.log("🔥 FIREBASE ID TOKEN ↓↓↓\n");
+
+  console.log("🔥 FIREBASE ID TOKEN ↓↓↓");
   console.log(idToken);
 }
 
 login();
-
-
-
-

@@ -12,7 +12,12 @@ export const verifyToken = (req, res, next) => {
     }
 
     // Extract token
-    const token = authHeader.split(" ")[1];
+    if (!authHeader.startsWith("Bearer ")) {
+  return res.status(401).json({ error: "Invalid auth format" });
+}
+
+const token = authHeader.split(" ")[1];
+
 
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
