@@ -6,12 +6,17 @@ import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import dataRoutes from "./routes/data.routes.js";
 import storageRoutes from "./routes/storage.routes.js";
+import devRoutes from "./routes/dev.routes.js";
+import admin from "../src/config/firebase.js"; // 👈 THIS LINE MUST EXIST
+
+
 
 const app = express();
 
 /* ---------------- MIDDLEWARE ---------------- */
 app.use(cors());
 app.use(express.json());
+app.use("/api/dev", devRoutes);
 
 /* ---------------- HEALTH CHECK ---------------- */
 app.get("/", (req, res) => {
